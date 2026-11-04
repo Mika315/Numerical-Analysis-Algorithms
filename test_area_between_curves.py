@@ -296,16 +296,16 @@ class TestAssignment3:
 
     def test_areabetween_parabolas(self):
         """Test 3.12: Area between two parabolas"""
+        # areabetween searches intersections only in [1, 100] (assignment spec),
+        # so use parabolas that intersect inside that range: x = 2 and x = 4
         f1 = lambda x: x**2
-        f2 = lambda x: -x**2 + 4
-        # Intersections at x = ±√2
-        # Area = integral of (f2 - f1) from -√2 to √2
+        f2 = lambda x: -x**2 + 12*x - 16
 
         with TestTimer() as timer:
             result = self.assignment.areabetween(f1, f2)
 
-        # Expected area ≈ 7.54
-        expected = 2 * scipy_integrate.quad(lambda x: 4 - 2*x**2, 0, np.sqrt(2))[0]
+        # Expected area = 8/3 ≈ 2.667
+        expected = scipy_integrate.quad(lambda x: f2(x) - f1(x), 2, 4)[0]
 
         error = abs(float(result) - expected)
         rel_error = error / expected if expected != 0 else error

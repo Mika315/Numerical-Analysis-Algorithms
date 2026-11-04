@@ -136,7 +136,7 @@ class TestAssignment2:
         valid, errors, _ = self.verify_intersections(f1, f2, X, 0.001)
 
         # Roots at -3π/4 and π/4
-        has_negative = any(-0.8 < x < -0.7 for x in X)
+        has_negative = any(-2.4 < x < -2.3 for x in X)
         has_positive = any(0.7 < x < 0.8 for x in X)
 
         passed = valid and has_negative and has_positive
@@ -144,10 +144,10 @@ class TestAssignment2:
         self.report.add_result(
             2, "test_sin_cos", passed,
             "" if passed else f"Missing expected roots, found: {X}",
-            expected="2 roots at ±π/4",
+            expected="roots at π/4 and -3π/4",
             actual=f"{len(X)} roots: {[f'{x:.4f}' for x in X]}",
             elapsed_time=timer.elapsed,
-            hint="Should find x≈±0.785"
+            hint="Should find x≈0.785 and x≈-2.356"
         )
         assert passed
 

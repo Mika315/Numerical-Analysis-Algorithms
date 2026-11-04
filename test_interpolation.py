@@ -325,7 +325,11 @@ class TestAssignment1:
                 f_interp = self.assignment.interpolate(f, -5, 5, 50)
                 mean_err, max_err = check_interpolation_error(f_interp, f, -5, 5, 100)
 
-            passed = mean_err < 0.5
+            # Relative error: a degree-7 polynomial on [-5, 5] reaches values in the thousands,
+            # so a fixed absolute threshold is not a fair measure of accuracy
+            xs = np.linspace(-5, 5, 1000)
+            scale = max(1.0, float(np.mean(np.abs(f(xs)))))
+            passed = mean_err / scale < 0.01
             self.report.add_result(
                 1, f"test_random_poly_{i}", passed,
                 "" if passed else f"Mean error {mean_err:.6f}",

@@ -150,6 +150,7 @@ class Assignment5:
 
     def _shoelace(self, points):
         """Shoelace formula for polygon area."""
+        points = np.asarray(points, dtype=np.float64)  # accept a list of (x, y) tuples too
         x, y = points[:, 0], points[:, 1]
         return 0.5 * abs(np.dot(x, np.roll(y, -1)) - np.dot(y, np.roll(x, -1)))
 
@@ -158,11 +159,13 @@ class Assignment5:
         Fit a shape to noisy sample points using Fourier descriptors via FFT.
         """
         start_time = time.time()
-        deadline = start_time + maxtime - 0.6
+        # Sampling deadline: keep ~2.1s for processing on long budgets, but never
+        # less than half the budget (otherwise short maxtime values collect no samples)
+        sampling_deadline = start_time + max(0.5 * maxtime, maxtime - 2.1)
 
         # Phase 1: Aggressive sampling
         points = []
-        while time.time() < deadline - 1.5 and len(points) < 8000:
+        while time.time() < sampling_deadline and len(points) < 8000:
             try:
                 x, y = sample()
                 if np.isfinite(x) and np.isfinite(y):
